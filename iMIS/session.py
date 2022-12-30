@@ -7,10 +7,10 @@ from os import environ
 from .auth import iMISAuth
 
 retry_strategy = Retry(
-    total=2,
+    total=8,
     status_forcelist=[413, 418, 429, 500, 502, 503, 504],
     method_whitelist=["HEAD", "GET", "PUT", "POST", "DELETE", "OPTIONS", "TRACE"],
-    backoff_factor=1
+    backoff_factor=2
 )
 
 # https://findwork.dev/blog/advanced-usage-python-requests-timeouts-retries-hooks/
