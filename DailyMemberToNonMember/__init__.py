@@ -7,8 +7,6 @@ import azure.functions as func
 from ..iMIS import api, helpers
 
 def main(mytimer: func.TimerRequest) -> None:
-    utc_timestamp = datetime.datetime.utcnow().replace(
-        tzinfo=datetime.timezone.utc).isoformat()
     IQAQUERY = environ["IQAQUERY"]
 
     if mytimer.past_due:
@@ -23,4 +21,7 @@ def main(mytimer: func.TimerRequest) -> None:
         pobj = api.getContact(id)
         helpers.genericProp(pobj, "CustomerTypeCode", "NM", "AdditionalAttributes")
         api.updateContact(pobj, id)
+    
+    utc_timestamp = datetime.datetime.utcnow().replace(
+        tzinfo=datetime.timezone.utc).isoformat()
     logging.info('DailyMemberToNonMember completed at %s', utc_timestamp)
