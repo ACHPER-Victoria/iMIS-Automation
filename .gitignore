@@ -131,4 +131,6 @@ local.settings.json
 
 # Azurite
 __azurite*
+__queuestorage__
 __blob*
+.fake
