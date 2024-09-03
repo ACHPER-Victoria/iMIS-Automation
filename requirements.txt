@@ -3,4 +3,6 @@
 # Manually managing azure-functions-worker may cause unexpected issues
 
 azure-functions
+azure-storage-queue
 requests
+iMISpy @ git+https://github.com/ACHPER-Victoria/iMISpy

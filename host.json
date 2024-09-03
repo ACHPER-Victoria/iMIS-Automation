@@ -10,6 +10,13 @@
   },
   "extensionBundle": {
     "id": "Microsoft.Azure.Functions.ExtensionBundle",
-    "version": "[3.3.0, 4.0.0)"
+    "version": "[4.*, 5.0.0)"
+  },
+  "extensions": {
+    "queues": {
+      "visibilityTimeout" : "00:00:30",
+      "batchSize": 3,
+      "maxDequeueCount": 2
+    }
   }
 }
