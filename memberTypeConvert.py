@@ -1,5 +1,5 @@
 import logging
-from iMISpy import helpers, iMISAPI
+from iMISpy import helpers
 from imisAPI import getAPI
 import azure.functions as func
 import json
