@@ -1,0 +1,41 @@
+<!-- to place in a HTML iPart on some page where staff can manually initiate the processing -->
+<h3>Manually process ID or all</h3>
+<label for="idata">iMIS ID (enter "all" without quotes to process everyone):</label>
+<input type="text" id="idata">
+
+<a class="TextButton" id="startbutton" href="#" onclick="startProcessing();return false;" disabled="disabled">Start</a>
+<p>Progress: <span id="status"></span></p>
+<p>Messages</p>
+<textarea id="textlog" rows="5" cols="100" style="width: 40em;"></textarea>
+
+<script>
+const AZURE_FUNCTION_URL = "";
+function appendToLog(s) {
+    document.getElementById("textlog").value = document.getElementById("textlog").value + s + "\n";
+}
+async function statusPoller() {
+    if (AZURE_FUNCTION_URL == "") { document.getElementById("status").innerText = "MISSING AZURE FUNCTION URL IN SCRIPT."; return; }
+    const response = await fetch(AZURE_FUNCTION_URL+"/process", {method: "POST", body: JSON.stringify({"status":""})});
+    const value = await response.text()
+    if (value == "0") {
+        document.getElementById("startbutton").removeAttribute("disabled");
+        document.getElementById("status").innerText = "Ready to start.";
+    } else {
+        document.getElementById("startbutton").setAttribute("disabled", "disabled");
+        document.getElementById("status").innerText = "Processing... "+ value + " item(s) remaining."
+    }
+}
+async function startProcessing() {
+    if (AZURE_FUNCTION_URL == "") { appendToLog("MISSING AZURE FUNCTION URL IN SCRIPT."); return; }
+    const val = document.getElementById("idata").value;
+    if (!val) { appendToLog("Missing ID. Not running."); return; }
+    appendToLog("Running for "+ val);
+    document.getElementById("status").innerText = "Waiting...";
+    document.getElementById("startbutton").setAttribute("disabled", "disabled");
+    const response = await fetch(AZURE_FUNCTION_URL+"/process", {method: "POST", body: JSON.stringify({"doconseq":val})})
+    appendToLog(await response.text());
+}
+window.addEventListener("DOMContentLoaded", () => {
+  setInterval(statusPoller, 4000);
+});
+</script>
